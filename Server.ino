@@ -1,12 +1,3 @@
-/*
-  --TODO--
- * *Schalter zum Zurücksetzen
- * *Alle Schrittmotoren aktivieren
- * *Richtige Umdrehungszahl
- * *Namen richtigstellen
-*/
-
-
 // die verschiedenen Libraries werden geladen
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -32,16 +23,19 @@ Stepper Schrittmotor1(SPU, 12, 14, 27, 26);
 //Stepper Schrittmotor4(SPU, 12, 14, 27, 26);
 
 // Funktion, die ein Produkt auswirft
-void dropProduct(int fachnummer) {
+void dropProduct(int fachnummer)
+{
   // wenn die Fachnummern übereinstimmen, wird der jeweilige Schrittmotor angesteuert
-  if (fachnummer == 1)Schrittmotor1.step(2048);
+  if (fachnummer == 1)
+    Schrittmotor1.step(2048);
   //if (fachnummer == 2)Schrittmotor2.step(2048);
   //if (fachnummer == 3)Schrittmotor3.step(2048);
   //if (fachnummer == 4)Schrittmotor4.step(2048);
 }
 
 // Funktion, die der App alle Produkte zurückgibt
-void getItems() {
+void getItems()
+{
   // HTML das zurückgegeben wird
   String html = "[{\"name\":\"Chips\",\"price\":\"4\",\"stock\":" + String(EEPROM.read(0)) + ",\"img\":\"\"},{\"name\":\"Schokolade\",\"price\":\"3\",\"stock\":" + String(EEPROM.read(1)) + ",\"img\":\"\"},{\"name\":\"Wasser\",\"price\":\"2\",\"stock\":" + String(EEPROM.read(2)) + ",\"img\":\"\"},{\"name\":\"Apfel\",\"price\":\"2\",\"stock\":" + String(EEPROM.read(3)) + ",\"img\":\"\"}]";
 
@@ -50,16 +44,20 @@ void getItems() {
 }
 
 // Funktion, die die Bestellung aufnimmt und die Produkte auswirft
-void orderItems() {
+void orderItems()
+{
   // für jedes Produkt(in der URL auch Argument genannt):
-  for (int i = 0; i < server.args(); i++) {
+  for (int i = 0; i < server.args(); i++)
+  {
     // wenn in der Argumentenliste Chips vorkommt:
-    if (server.argName(i) == "Chips") {
+    if (server.argName(i) == "Chips")
+    {
       // wird der geforderte Wert ausgelesen
       String value = server.arg(i);
 
       // wenn die Anzahl der geforderten Produkte unter dem Bestand liegt:
-      if (value.toInt() <= EEPROM.read(0)) {
+      if (value.toInt() <= EEPROM.read(0))
+      {
         // Debug Ausgabe
         Serial.println("Chips: " + value);
 
@@ -67,7 +65,8 @@ void orderItems() {
         EEPROM.update(0, EEPROM.read(0) - value.toInt());
 
         // für jedes ausgewählte Produkt der Sorte Chips:
-        for (int j = 0; j < value.toInt(); j++) {
+        for (int j = 0; j < value.toInt(); j++)
+        {
           // Fachnummer wird übergeben
           dropProduct(1);
         }
@@ -75,12 +74,14 @@ void orderItems() {
     }
 
     // wenn in der Argumentenliste Schokolade vorkommt:
-    if (server.argName(i) == "Schokolade") {
+    if (server.argName(i) == "Schokolade")
+    {
       // wird der geforderte Wert ausgelesen
       String value = server.arg(i);
 
       // wenn die Anzahl der geforderten Produkte unter dem Bestand liegt:
-      if (value.toInt() <= EEPROM.read(1)) {
+      if (value.toInt() <= EEPROM.read(1))
+      {
         // Debug Ausgabe
         Serial.println("Schokolade: " + value);
 
@@ -88,7 +89,8 @@ void orderItems() {
         EEPROM.update(1, EEPROM.read(1) - value.toInt());
 
         // für jedes ausgewählte Produkt der Sorte Schokolade:
-        for (int j = 0; j < value.toInt(); j++) {
+        for (int j = 0; j < value.toInt(); j++)
+        {
           // Fachnummer wird übergeben
           dropProduct(2);
         }
@@ -96,12 +98,14 @@ void orderItems() {
     }
 
     // wenn in der Argumentenliste Wasser vorkommt:
-    if (server.argName(i) == "Wasser") {
+    if (server.argName(i) == "Wasser")
+    {
       // wird der geforderte Wert ausgelesen
       String value = server.arg(i);
 
       // wenn die Anzahl der geforderten Produkte unter dem Bestand liegt:
-      if (value.toInt() <= EEPROM.read(2)) {
+      if (value.toInt() <= EEPROM.read(2))
+      {
         // Debug Ausgabe
         Serial.println("Wasser: " + value);
 
@@ -109,7 +113,8 @@ void orderItems() {
         EEPROM.update(2, EEPROM.read(2) - value.toInt());
 
         // für jedes ausgewählte Produkt der Sorte Wasser:
-        for (int j; j < value.toInt(); j++) {
+        for (int j; j < value.toInt(); j++)
+        {
           // Fachnummer wird übergeben
           dropProduct(3);
         }
@@ -117,12 +122,14 @@ void orderItems() {
     }
 
     // wenn in der Argumentenliste Apfel vorkommt:
-    if (server.argName(i) == "Apfel") {
+    if (server.argName(i) == "Apfel")
+    {
       // wird der geforderte Wert ausgelesen
       String value = server.arg(i);
 
       // wenn die Anzahl der geforderten Produkte unter dem Bestand liegt:
-      if (value.toInt() <= EEPROM.read(3)) {
+      if (value.toInt() <= EEPROM.read(3))
+      {
         // Debug Ausgabe
         Serial.println("Apfel: " + value);
 
@@ -130,7 +137,8 @@ void orderItems() {
         EEPROM.update(3, EEPROM.read(3) - value.toInt());
 
         // für jedes ausgewählte Produkt der Sorte Apfel:
-        for (int j; j < value.toInt(); j++) {
+        for (int j; j < value.toInt(); j++)
+        {
           // Fachnummer wird übergeben
           dropProduct(4);
         }
@@ -143,7 +151,8 @@ void orderItems() {
 }
 
 // Funktion zum Zurücksetzen des Bestands
-void resetStock() {
+void resetStock()
+{
   // Bestand wird wieder auf sechs aufgefüllt
   EEPROM.update(0, 6);
   EEPROM.update(1, 6);
@@ -154,7 +163,8 @@ void resetStock() {
   server.send(200, "text/html", "Bestand wurde zurückgesetzt");
 }
 
-void setup() {
+void setup()
+{
   // die Baudrate wird festgelegt
   Serial.begin(115200);
 
@@ -186,7 +196,8 @@ void setup() {
   Serial.println("Server gestartet...");
 }
 
-void loop() {
+void loop()
+{
   // der Server kontrolliert die definierten Routen
   server.handleClient();
 }
